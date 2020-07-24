@@ -186,7 +186,6 @@ export default {
   outline: none !important;
   box-shadow: none;
   color: grey;
-  background: linear-gradient(top, #b6b6b5 100%, rgb(246, 248, 248) 10%);
   box-shadow: 0 20px 12px 0px rgba(0, 0, 0, 0.2);
   animation: float ease 3s;
   animation-iteration-count: infinite;
@@ -211,7 +210,6 @@ export default {
   font-size: 16px;
 }
 .logbtn:hover {
-  background: linear-gradient(top, #adadad 100%, rgb(246, 248, 248) 10%);
   color: rgb(214, 129, 0);
 }
 .btn:focus,

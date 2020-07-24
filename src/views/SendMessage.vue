@@ -112,7 +112,6 @@ input[type="text"],
   text-align: center;
   outline: none !important;
   box-shadow: none;
-  background: linear-gradient(top, #b6b6b5 100%, rgb(246, 248, 248) 10%);
   box-shadow: 0 20px 12px 0px rgba(0,0,0,0.2);
   animation: float ease 3s ;
   animation-iteration-count: infinite;
@@ -137,7 +136,6 @@ input[type="text"],
   font-size: 16px;
 }
 .btn:hover {
-  background: linear-gradient(top, #adadad 100%, rgb(246, 248, 248) 10%);
   color: rgb(214, 129, 0);
 }
 .btn:focus,
@@ -167,7 +165,6 @@ input[type="text"],
 	}
 }
 .btn1:hover {
-  background: linear-gradient(top, #adadad 100%, rgb(246, 248, 248) 10%);
   color: rgb(0, 189, 214);
 }
 .evname {

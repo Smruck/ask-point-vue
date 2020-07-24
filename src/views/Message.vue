@@ -27,6 +27,7 @@ export default {
     getImage() { return this.message.image ? this.message.image : icon; },
     title() { 
       if(this.message.username === 'anonymous') { return ''; }
+      else if(this.message.username === state.userstate.username) { return 'Go to your profile'; }
       else { return `Send personal email to ${this.message.username}`; }
     }
   },

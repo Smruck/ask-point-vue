@@ -1,12 +1,12 @@
 <template>
 <div class="container" id="container" @click.prevent="goback">
   <div class="form-container">
+  <p class="evname">Send personal email To:&nbsp;<b>{{touser}}</b></p>
   <form class="form" id="form">
-    <textarea v-focus class="form-control rounded-1" id="message" name="message" placeholder="Email content..." v-model="content" rows="22" spellcheck="false"></textarea>
+    <textarea v-focus class="form-control rounded-1" id="message" name="message" placeholder="Email content..." v-model="content" rows="21" spellcheck="false"></textarea>
     <button id="btn" type="submit" class="btn btnAsk" @click.prevent="send" :disabled="status">Send email</button>
     <button class="btn btn1" @click.prevent="gobackBtn" :disabled="status">Go back</button>
   </form>
-  <p class="evname">To: {{touser}}</p>
   </div>
    <div v-if="showLoader" class="loader-container">
       <Loader />
@@ -38,7 +38,7 @@ export default {
     },
     send: async function() { 
       this.showLoader = true;
-      if(this.content.trim() !== '') { 
+      if(this.content) { 
         const result = await emailService.sendMail(state.userstate.key, state.message.mess.user_id, this.content); 
         if(result) { 
           state.message.mess = "Email was send successfully!"; 
@@ -67,13 +67,13 @@ export default {
 }
 .form-container {
   width: 600px;
-  height: 540px;
+  height: 560px;
   position: relative;
   margin: 0 auto;
   margin-top: 2%;
   box-shadow: 0 12px 12px 0px rgba(0,0,0,0.2);
   border-radius: 8px;
- animation: fadein 1s;
+  animation: fadein 1s;
   -moz-animation: fadein 1s;
   -webkit-animation: fadein 1s;
   -o-animation: fadein 1s;
@@ -111,7 +111,6 @@ input[type="text"],
   text-align: center;
   outline: none !important;
   box-shadow: none;
-  background: linear-gradient(top, #b6b6b5 100%, rgb(246, 248, 248) 10%);
   box-shadow: 0 20px 12px 0px rgba(0,0,0,0.2);
   animation: float ease 3s ;
   animation-iteration-count: infinite;
@@ -135,7 +134,6 @@ input[type="text"],
   font-size: 16px;
 }
 .btn:hover {
-  background: linear-gradient(top, #adadad 100%, rgb(246, 248, 248) 10%);
   color: rgb(214, 129, 0);
 }
 .btn:focus,
@@ -165,7 +163,6 @@ input[type="text"],
 	}
 }
 .btn1:hover {
-  background: linear-gradient(top, #adadad 100%, rgb(246, 248, 248) 10%);
   color: rgb(0, 189, 214);
 }
 .evname {
@@ -174,7 +171,12 @@ input[type="text"],
   text-align: center;
   cursor:default;
   font-size: 18px;
-  color:rgb(206, 205, 205);
+  color:rgb(177, 178, 179);
   font-family:'Segoe UI';
+}
+.username {
+  font-size: 19px;
+
+  color:rgb(148, 147, 147)
 }
 </style>
