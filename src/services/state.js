@@ -9,6 +9,7 @@ const update = { gate: true };
 const deleted = { gate: true };
 const likes = { ids: [] };
 const repo = { email: '' }
+const voted = { messages: [] }
 
 export { userstate as userstate };
 export { loop as loop };
@@ -21,6 +22,7 @@ export { update as update };
 export { deleted as deleted };
 export { likes as likes };
 export { repo as repo };
+export { voted as voted };
 
 export function clearEventState() { 
     eventstate.name = null; 

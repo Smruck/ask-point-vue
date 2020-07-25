@@ -28,6 +28,9 @@ export async function removeMessage(index) {
     state.deleted.gate = false;
     state.time.stamp = Date.now();
     const message = state.eventstate.messages[index];
+    const id = message._id;
+    const i = state.voted.messages.indexOf(id);
+    state.voted.messages.splice(i, 1);
     state.eventstate.deleted.push(message);
     state.eventstate.messages.splice(index, 1);
     const header = await authService.nonAuthHeader('DELETE', JSON.stringify({ timestamp: state.time.stamp }));
@@ -50,6 +53,7 @@ export async function changeLikes(index, updown) {
     state.eventstate.messages[index].likes = updown > 0 ? 
     state.eventstate.messages[index].likes + 1 : 
     state.eventstate.messages[index].likes - 1 ;
+    state.voted.messages.push(state.eventstate.messages[index]._id);
     const body = JSON.stringify({ updown: updown, timestamp: state.time.stamp });
     const header = await authService.nonAuthHeader('PUT', body);
     await fetch(`${state.domain.url}/api/messages/${state.eventstate.messages[index]._id}`, header);

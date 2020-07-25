@@ -45,8 +45,8 @@ export default {
       if(state.userstate.key !== state.eventstate.admin) { alert('You have to be an event admin to delete this message\r\nFor more information go to about and then help section'); }
       else { messageService.removeMessage(this.index); }
     },
-    likesUp() { if(this.voted) { this.voted = false; messageService.changeLikes(this.index, 1); }},
-    likesDown() { if(this.voted) { this.voted = false; messageService.changeLikes(this.index, -1); }},
+    likesUp() { if(!state.voted.messages.includes(this.message._id)) { messageService.changeLikes(this.index, 1); }},
+    likesDown() { if(!state.voted.messages.includes(this.message._id)) { messageService.changeLikes(this.index, -1); }},
   },
 };
 </script> 
