@@ -225,7 +225,7 @@ export default {
   background-color: white;
   transform: scale(1.2);
   opacity: 0.9;
-  color: rgb(99, 170, 228);
+  color: rgb(43, 181, 202);
   text-shadow: 0px, 0px, 2px, rgb(112, 183, 241);
 }
 .btncreate:active {

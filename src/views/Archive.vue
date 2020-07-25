@@ -88,6 +88,11 @@ export default {
   position: fixed;
   top: 0;
   z-index: 2;
+  background: linear-gradient(
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 1) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -115,13 +120,13 @@ export default {
 }
 @keyframes float {
   0% {
-    transform: translatey(0px);
+    transform: translatex(0px);
   }
   50% {
     transform: translatex(-16px);
   }
   100% {
-    transform: translatey(0px);
+    transform: translatex(0px);
   }
 }
 .logbtn {

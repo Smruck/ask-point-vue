@@ -6,7 +6,7 @@
         <div class="thumbup"><img class="thumb-up" src="../assets/like.png"></div>
         <div class="likes"><b>{{message.likes}}</b></div>
         <div class="thumb-down"><img class="thumb-down" src="../assets/disslike.png"></div>
-        <button class="rotate btn" @click.prevent="destroyMessage"><b class="x">&times;</b></button>
+        <button class="rotate btn" @click.prevent="destroyMessage"><b class="x" title="Delete forever">&times;</b></button>
         <div class="date"><b>{{message.date}}</b></div>
       </div>
       <br>
@@ -33,6 +33,7 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 .body {
+  position: relative;
   margin: 0  auto;
   width: 680px;
   min-height: 220px;
@@ -46,7 +47,6 @@ export default {
   padding-right: 20px;
   padding-bottom: 20px;
   border-top-left-radius: 50px;
-  opacity: 0.92;
   word-wrap: break-word;
 }
 @keyframes fadeInAnimation {
@@ -54,7 +54,7 @@ export default {
     opacity: 0;
   }
   100% {
-    opacity: 0.92;
+    opacity: 1;
   }
 }
 .operators {
@@ -62,7 +62,7 @@ export default {
   left:-20px;
   height: 100px; 
   width: 106.2%;
-  background-color: rgb(229, 235, 234);
+  background-color: rgb(231, 231, 231);
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
@@ -70,7 +70,6 @@ export default {
 }
 .icon {
   position: relative;
-  z-index: 5;
   top: 10px;
   left:10px;
   width: 80px;
@@ -82,13 +81,10 @@ export default {
   position: relative;
   top: 5px;
   left:5px;
-  z-index: 9;
   width: 81px;
   height: 81px;
   border-radius: 50%;
-}
-.img:hover {
-  cursor: pointer;
+  opacity: 0.8;
 }
 .username{
   cursor: pointer;
@@ -98,8 +94,8 @@ export default {
   width: 100%;
   top: -24px;
   left: 118px;
+  opacity: 0.8;
 }
-
 .likes {
   height: 20px;
   cursor:default;
@@ -108,6 +104,7 @@ export default {
   color: grey;
   position: relative;
   left: 480px;
+  opacity: 0.6;
 }
 .thumbup{
   position: relative;
@@ -115,6 +112,7 @@ export default {
   left: 0px;
   width:24px;
   height:24px;
+  opacity: 0.6;
 }
 .thumb-up {
   position: relative;
@@ -131,19 +129,16 @@ export default {
   left: 260px;
   width:24px;
   height:24px;
-  opacity: 0.8;
+  opacity: 0.6;
 }
 .thumb-down:hover {
-  cursor: pointer;
   width:24px;
   height:24px;
-  opacity: 0.8;
+  
 }
 .thumb-up:hover {
-  cursor: pointer;
   width:24px;
   height:24px;
-  opacity: 0.8;
 }
 .own {
   opacity: 0.6;
@@ -158,10 +153,10 @@ export default {
   height:40px;
   border-radius: 50%;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.4;
 }
 .rotate:hover {
-  transition: transform 1.2s linear;
+  transition: transform 1.0s linear;
   transform: rotate(360deg);
   opacity: 1;
 }
@@ -177,7 +172,8 @@ export default {
   position: relative;
   width:220px;
   top: -186px;
-  left:118px
+  left:118px;
+  opacity: 0.8;
 }
 .btn:focus,
 .btn:active {

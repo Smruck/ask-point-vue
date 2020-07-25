@@ -9,7 +9,7 @@ export async function send(email) {
 }
 export function newPass() {
     let password = '';
-    for (let index = 0; index < 10; index++) { password = password + (Math.floor(Math.random() * 10)).toString(); }
+    for (let index = 0; index < 10; index++) { password = password + (Math.floor(Math.random() * 10)); }
     return password;
 }
 async function updateUser(email, password) {

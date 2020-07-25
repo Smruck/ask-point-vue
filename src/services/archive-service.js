@@ -1,7 +1,6 @@
 const state = require("../services/state.js");
 const authService = require('../services/auth-service.js');
 
-
 export async function deleteAll() {
     state.deleted.gate = false;
     state.time.span = Date.now();
@@ -12,4 +11,3 @@ export async function deleteAll() {
     if(response.ok) { return true; }
     return false;
 }
-

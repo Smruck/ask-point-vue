@@ -63,7 +63,6 @@ export default {
   -moz-animation: fadein 1s;
   -webkit-animation: fadein 1s;
   -o-animation: fadein 1s;
-  
 }
 @keyframes fadein {
   from {
@@ -81,6 +80,20 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #01c288;
+  animation: float ease 3s;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+@keyframes float {
+  0% {
+    transform: translatex(0px);
+  }
+  50% {
+    transform: translatex(-16px);
+  }
+  100% {
+    transform: translatex(0px);
+  }
 }
 .nav-text {
   color: rgb(105, 103, 103);

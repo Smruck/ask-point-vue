@@ -49,7 +49,7 @@
         </button>
         <br>
         <br>
-         <button @click="logout" id="btn1" class="button btn btn-outline logbtn">
+         <button @click="logout" id="btn1" class="button btn btn1 btn-outline logbtn">
           <b> Log out </b>
         </button>
       </form >
@@ -130,7 +130,7 @@ export default {
     logout: async function() { 
       await state.clearUserState(); 
       if(state.eventstate.key) { this.$router.push('messages'); }
-      else { this.$router.push('messages'); }
+      else { this.$router.push('select'); }
     },
     handleKeyEvent(e) { 
       if(e.keyCode === 81) { this.$router.push('messages'); }
@@ -290,5 +290,17 @@ input[name="email"] {
   border-color: #6fb1dd;
   box-shadow: 0px 2px 2px rgba(60, 61, 63, 0.075) inset,
     0px 0px 8px rgba(85, 193, 243, 0.5);
+}
+.btn1:hover {
+  border-color: white;
+  background-color: white;
+  color: rgb(49, 181, 214);
+  transform: scale(1.1);
+}
+.btn1:focus,
+.btn1:active {
+  cursor: pointer;
+  outline: none !important;
+  box-shadow: none;
 }
 </style>

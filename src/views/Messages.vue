@@ -193,13 +193,13 @@ export default {
 }
 @keyframes float {
   0% {
-    transform: translatey(0px);
+    transform: translatex(0px);
   }
   50% {
     transform: translatex(-16px);
   }
   100% {
-    transform: translatey(0px);
+    transform: translatex(0px);
   }
 }
 .logbtn {

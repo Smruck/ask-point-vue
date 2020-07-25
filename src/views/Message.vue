@@ -3,10 +3,10 @@
       <div class="operators">
         <div class="img"><img id="img" class="img" :src="getImage" @click="gotoProfile" :title="title"></div>
         <div class="username" @click.prevent="gotoProfile" :title="title"><b>{{message.username}}</b></div>
-        <div class="thumbup"  @click.prevent="likesUp()"><img class="thumb-up" src="../assets/like.png"></div>
+        <div class="thumbup"  @click.prevent="likesUp()"><img class="thumb-up" src="../assets/like.png" title="like it"></div>
         <div class="likes"><b>{{message.likes}}</b></div>
-        <div class="thumb-down" @click.prevent="likesDown"><img class="thumb-down" src="../assets/disslike.png"></div>
-        <button class="rotate btn" @click.prevent="destroyMessage"><b class="x">&times;</b></button>
+        <div class="thumb-down" @click.prevent="likesDown"><img class="thumb-down" src="../assets/disslike.png" title="disslike it"></div>
+        <button class="rotate btn" @click.prevent="destroyMessage"><b class="x" title="Delete message">&times;</b></button>
         <div class="date"><b>{{message.date}}</b></div> 
       </div>
       <br>
@@ -67,7 +67,6 @@ export default {
   padding-right: 20px;
   padding-bottom: 20px;
   border-top-left-radius: 50px;
-  opacity: 0.96;
   word-wrap: break-word;
 }
 @keyframes fadeInAnimation {
@@ -75,7 +74,7 @@ export default {
     opacity: 0;
   }
   100% {
-    opacity: 0.92;
+    opacity: 1;
   }
 }
 .operators {
@@ -83,7 +82,7 @@ export default {
   left:-20px;
   height: 100px; 
   width: 106.2%;
-  background-color: rgb(229, 235, 234);
+  background-color: rgb(221, 241, 239);
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
@@ -114,7 +113,7 @@ export default {
 .username{
   cursor: pointer;
   height: 22px;
-  width: 100%;
+  width: 100px;
   color: rgb(128, 128, 128);  
   position: relative;
   top: -24px;
@@ -182,7 +181,7 @@ export default {
   opacity: 0.6;
 }
 .rotate:hover {
-  transition: transform 1.2s linear;
+  transition: transform 1.0s linear;
   transform: rotate(360deg);
   opacity: 1;
 }
