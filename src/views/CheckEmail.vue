@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <p class="text">Select your email from icons below</p>
+        <p class="text">A shortcut to your email provider</p>
         <div class="icons">
             <span><a href="https://accounts.google.com/ServiceLogin"><img class="img" src="../assets/gmail-icon.png" alt="image" data-toggle="tooltip" data-placement="bottom" title="Gmail"></a></span>
             <span><a href="https://login.yahoo.com/config/login?.src=fpctx&.intl=us&.lang=en-US&.done=https://www.yahoo.com"><img class="img" src="../assets/yahoo-icon.png" alt="image" data-toggle="tooltip" data-placement="bottom" title="Yahoo mail"></a></span>
@@ -45,9 +45,10 @@ export default {
   left: 50%; 
   opacity: 0.8;
   transform: translate(-50%, -50%);
-
+  animation: textanim ease 1.2s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 }
-
 .img {
   width: 70px;
   height: 70px;

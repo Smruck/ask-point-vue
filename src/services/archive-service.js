@@ -1,13 +1,23 @@
 const state = require("../services/state.js");
 const authService = require('../services/auth-service.js');
+const socketService = require('../services/socket-io-service.js');
 
 export async function deleteAll() {
-    state.deleted.gate = false;
-    state.time.span = Date.now();
-    state.eventstate.deleted = [];        
-    const body = JSON.stringify({ event: state.eventstate.key, timestamp: state.time.stamp });
-    const header = authService.nonAuthHeader('DELETE', body);
-    const response = await fetch(`${state.domain.url}/api/deleted`, header);
-    if(response.ok) { return true; }
-    return false;
+    if (state.eventstate.deleted.length > 0) {
+        socketService.deleteAll();
+        const body = JSON.stringify({id: state.eventstate.key});
+        const header = await authService.getHeader('DELETE', body);
+        await fetch(`${state.domain.url}/api/deleted`, header);
+    }
+}
+export function updateState(component) {
+    setInterval(function() {
+        component.messages = state.eventstate.deleted; 
+        component.messagesCount = state.eventstate.deleted.length; 
+    }, 60); 
+}
+export function evaluateEnterCredentials(component) {
+    if(!state.userstate.key) { component.$router.push('login'); return; }
+    if(state.userstate.key === state.eventstate.admin) { return; }
+    component.$router.push('messages'); 
 }

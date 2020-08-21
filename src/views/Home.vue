@@ -20,10 +20,12 @@
 </template>
 
 <script>
+const selectService = require("../services/select-service.js");
 
 export default {
   name: "Home",
-  mounted() { setTimeout(() => { this.$router.push('/select' ); }, 2200); }
+  beforeCreate: async function() { await selectService.getAllEventNames(); },
+  mounted() { setTimeout(() => { this.$router.push('/select' ); }, 2100); }
 };
 </script>
 

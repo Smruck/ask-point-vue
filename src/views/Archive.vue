@@ -2,7 +2,7 @@
    <div class="container" id="app">
     <div class="navcontainer">
       <NavMessages />
-      <div class="number"><b>{{delNumber}}</b></div>
+      <div class="number"><b>{{messagesCount}}</b></div>
     </div>
     <div class="nav-background"></div>
      <button class="btn logbtn" @click.prevent="deleteAll">Delete all</button>
@@ -21,30 +21,33 @@
 </template>
 
 <script>
-import NavMessages from "../views/NavMessages.vue";
-import DeletedMessage from "../views/DeletedMessage.vue";
+import NavMessages from '../views/NavMessages.vue';
+import DeletedMessage from '../views/DeletedMessage.vue';
 
-const state = require('../services/state.js');
 const archiveService = require('../services/archive-service.js');
+const state = require('../services/state.js');
 
 export default {
   name: "Archive",
   components: { NavMessages, DeletedMessage },
-  data() { return { messages: state.eventstate.deleted, delNumber: state.eventstate.deleted.length } },
-  methods: {
-    deleteAll: async function() { if(state.eventstate.deleted.length > 0) { await archiveService.deleteAll(); }}
-  },
-  beforeCreate() { 
-    if(state.userstate.key && state.eventstate.admin) { 
-      if(state.userstate.key !== state.eventstate.admin) { this.$router.push('messages'); }
+  data() { return { 
+    messages: state.eventstate.deleted, 
+    messagesCount: state.eventstate.deleted.length
     }
-    else { this.$router.push('messages'); }
   },
+  methods: {
+    deleteAll: async function() { await archiveService.deleteAll(); },
+    handleKeyEvent(e) { 
+      if(e.keyCode === 66 && e.ctrlKey) { this.$router.push('profile'); }
+      if(e.keyCode === 81 && e.ctrlKey) { this.$router.push('messages'); }
+    },
+  },
+  created() { 
+    archiveService.evaluateEnterCredentials(this); 
+  }, 
   mounted() { 
-    setInterval(() => { 
-    this.messages = state.eventstate.deleted; 
-    this.delNumber = state.eventstate.deleted.length;
-    }, 100); 
+    archiveService.updateState(this); 
+    document.addEventListener('keydown', (e) => this.handleKeyEvent(e));
   }
 };
 </script>
@@ -52,7 +55,7 @@ export default {
 <style scoped>
 .number {
   cursor: default;
-  color: rgb(20, 167, 96);
+  color: rgb(20, 167, 96);  
   font-size: 18px;
   position: fixed;
   z-index: 9;
@@ -80,7 +83,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 42px;
+  margin-top: 40px;
 }
 .nav-background {
   width: 100%;

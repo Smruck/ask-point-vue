@@ -1,4 +1,5 @@
-const state = require("../services/state.js");
+const state = require('../services/state.js');
+const FormData = require('form-data');
 
 export async function saveImage(file) {
 

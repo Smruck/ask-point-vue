@@ -41,13 +41,13 @@ export default {
        this.$router.push('messages');
       }
     },
+    getDateAsString() { return new Date().toString().substring(0, 24); },
     send: async function() { 
       if(this.content.trim() !== '') { 
         this.showLoader = true;
-        const sendResult = await messageService.sendMessage(this.content); 
-        if(sendResult) { this.$router.push('messages'); }
+        const result = messageService.sendMessage(this.content);
+        if(result) { this.$router.push('messages');  }
       }
-      this.showLoader = false;
     },
     listenForEnter(e) { 
       const shiftEnter = e.keyCode === 13 && e.shiftKey;
@@ -69,7 +69,7 @@ export default {
   left: 44.4%;
 }
 .form-container {
-  width: 600px;
+  width: 660px;
   height: 540px;
   position: relative;
   margin: 0 auto;

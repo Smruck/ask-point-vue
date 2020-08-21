@@ -75,7 +75,7 @@ export default {
       if(!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(this.email))) { errorService.setError("Please type correct email address", "email-login"); return; }
       if(!this.password) { errorService.setError("Please type your password", "password-login"); return; }
       this.showLoader = true;
-      const result = await loginService.login(this.$data);
+      const result = await loginService.login(this);
       if(result) { 
         if(state.eventstate.key) { this.$router.push('messages'); }
         else { this.$router.push('select'); }

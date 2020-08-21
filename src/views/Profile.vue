@@ -93,30 +93,26 @@ export default {
   methods: {
     change: async function() {
       if (this.password) {
-        if (this.password.length > 30 || this.password.length < 3) { errorService.setError("Password should be between 3 and 30 symbols", "password"); } 
-        else if (this.password !== this.confirmpassword) { errorService.setError("Password and confirm password do not match", "confirmpassword"); } 
-        else { 
-          this.status = false;
-          this.showLoader = true;
-          const result = await profileService.change(this.$data); 
-          if(result) { 
-            if(state.eventstate.key) { this.$router.push('messages' ); }
-            else { this.$router.push('select' ); } 
-          }
+        if (this.password.length > 30 || this.password.length < 3) { errorService.setError("Password should be between 3 and 30 symbols", "password"); return; } 
+        if (this.password !== this.confirmpassword) { errorService.setError("Password and confirm password do not match", "confirmpassword"); return; } 
+        this.status = false;
+        this.showLoader = true;
+        const result = await profileService.change(this); 
+        if (result) { 
+          if(state.eventstate.key) { this.$router.push('messages' ); }
+          else { this.$router.push('select' ); } 
         }
       }
-      else if (this.username) {
-        if(this.username === state.userstate.username) { this.$router.push('select'); }
-        if (this.username.length > 30 || this.username.length < 3) { errorService.setError("Username should be between 3 and 30 symbols", "username"); }
-        else if (!this.username.match("^[a-zA-Z]+$")) { errorService.setError("Username should contains only letters", "username"); } 
-        else { 
-          this.status = false;
-          this.showLoader = true;
-          const resultChange = await profileService.change(this.$data); 
-          if(resultChange) { 
-            if(state.eventstate.key) { this.$router.push('messages'); }
-            else { this.$router.push('select'); }
-          }
+      if (this.username) {
+        if (this.username === state.userstate.username) { this.$router.push('select'); }
+        if (this.username.length > 30 || this.username.length < 3) { errorService.setError("Username should be between 3 and 30 symbols", "username"); return; }
+        if (!this.username.match("^[a-zA-Z]+$")) { errorService.setError("Username should contains only letters", "username"); return; } 
+        this.status = false;
+        this.showLoader = true;
+        const resultChange = await profileService.change(this); 
+        if(resultChange) { 
+          if(state.eventstate.key) { this.$router.push('messages'); }
+          else { this.$router.push('select'); }
         }
       } 
       if(state.eventstate.key) { this.$router.push('messages'); }
@@ -133,7 +129,7 @@ export default {
       else { this.$router.push('select'); }
     },
     handleKeyEvent(e) { 
-      if(e.keyCode === 81) { this.$router.push('messages'); }
+      if(e.keyCode === 81 && e.ctrlKey) { this.$router.push('messages'); }
     },
   },
   computed: {
@@ -143,10 +139,7 @@ export default {
   },
   components: { NavComponent, Loader },
   created() { if(!state.userstate.key) { this.$router.push('login'); }},
-  mounted() { 
-    const that = this;
-    window.addEventListener('keydown', function(e) { that.handleKeyEvent(e); }); 
-  }
+  mounted() { document.addEventListener('keydown', (e) => this.handleKeyEvent(e) ); }
 }
 </script>
 

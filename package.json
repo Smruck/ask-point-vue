@@ -10,9 +10,18 @@
   "dependencies": {
     "@sendgrid/mail": "^7.1.0",
     "aws-sdk": "^2.687.0",
+    "bcryptjs": "^2.4.3",
+    "bootstrap-vue": "^2.15.0",
+    "btoa": "^1.2.1",
     "core-js": "^3.6.4",
+    "crypto-js": "^4.0.0",
+    "file-system": "^2.2.2",
+    "fs": "0.0.1-security",
+    "jquery": "^3.5.1",
+    "uuid": "^8.3.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",
+    "vue-socket-io": "^0.3.2",
     "vue-socket.io": "^3.0.9",
     "vuex": "^3.4.0",
     "websocket-extensions": "^0.1.4"

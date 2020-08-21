@@ -59,42 +59,15 @@ export default {
   position: fixed;
   display: table;
   margin: 0 auto;
-  animation: fadein 1s;
-  -moz-animation: fadein 1s;
-  -webkit-animation: fadein 1s;
-  -o-animation: fadein 1s;
+ 
 }
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 #nav a {
   font-weight: bold;
   color: #7d848b;
 }
-
 #nav a.router-link-exact-active {
   color: #01c288;
-  animation: float ease 3s;
-  animation-iteration-count: infinite;
-  animation-fill-mode: forwards;
-}
-@keyframes float {
-  0% {
-    transform: translatex(0px);
-  }
-  50% {
-    transform: translatex(-16px);
-  }
-  100% {
-    transform: translatex(0px);
-  }
-}
+ }
 .nav-text {
   color: rgb(105, 103, 103);
   margin-top: 3px;

@@ -37,32 +37,14 @@
 import Loader from "../views/Loader.vue";
 import NavComponent from "../views/NavComponent.vue";
 
-const forgotPassword = require("../services/forgotPassword-service.js");
-const errorService = require("../services/custom-error.js");
+const forgotPasswordService = require("../services/forgotPassword-service.js");
 const state = require("../services/state.js");
 
 export default {
   name: "ForgotPassword",
-  data: () => {
-    return {
-      email: null,
-      showLoader: false
-    };
-  },
+  data() { return { email: null, showLoader: false }; },
   methods: {
-    send: async function() {
-      this.showLoader = !this.showLoader;
-      if(!this.email) { 
-        this.showLoader = !this.showLoader; 
-        errorService.setError("Type your email and we will send you a new password", "email"); 
-        return; 
-      }
-      this.showLoader = true;
-      const response = await forgotPassword.send(this.email); 
-      if(response) { this.$router.push('checkemail'); }
-        errorService.setError("Provided email address doesn't exist in the system", "email"); 
-        this.showLoader = false;
-    }
+    send: async function() { forgotPasswordService.processSend(this); }
   },
   components: { Loader, NavComponent },
   created: function() { if(state.userstate.key) { this.$router.push('select'); }}

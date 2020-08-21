@@ -38,25 +38,11 @@ export default {
   position: fixed;
   margin: 0 auto;
   display: table;
-  animation: fadein 1s;
-  -moz-animation: fadein 1s;
-  -webkit-animation: fadein 1s;
-  -o-animation: fadein 1s;
 }
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 #nav a {
   font-weight: bold;
   color: #7d848b;
 }
-
 #nav a.router-link-exact-active {
   color: #11b382;
 }

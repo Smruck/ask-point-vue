@@ -25,7 +25,7 @@ export default {
     getImage() { return this.message.image ? this.message.image : icon; },
   },
   methods:{ 
-    destroyMessage: async function() {  messageService.removeDeletedMessage(this.index, this.message._id); }
+    destroyMessage: async function() {  messageService.removeDeletedMessage(this.index); }
   }
 };
 </script> 
@@ -38,7 +38,7 @@ export default {
   width: 680px;
   min-height: 220px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgb(104, 104, 104);
+  box-shadow: 0 22px 12px 0px rgba(0, 0, 0, 0.2);
   animation: fadeInAnimation ease 1s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
@@ -62,7 +62,7 @@ export default {
   left:-20px;
   height: 100px; 
   width: 106.2%;
-  background-color: rgb(231, 231, 231);
+  background-color: rgb(226, 225, 220);
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;

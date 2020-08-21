@@ -58,11 +58,11 @@ export default {
   width: 680px;
   min-height: 200px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgb(104, 104, 104);
+  box-shadow: 0 22px 12px 0px rgba(0, 0, 0, 0.2);
   animation: fadeInAnimation ease 1s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
-  margin-top:18px;
+  margin-top: 18px;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;

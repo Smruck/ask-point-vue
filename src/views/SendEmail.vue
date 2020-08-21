@@ -66,7 +66,7 @@ export default {
   left: 44.4%;
 }
 .form-container {
-  width: 600px;
+  width: 660px;
   height: 560px;
   position: relative;
   margin: 0 auto;

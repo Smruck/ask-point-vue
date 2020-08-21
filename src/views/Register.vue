@@ -70,7 +70,7 @@ export default {
       else if(!this.username.match('^[a-zA-Z0-9 ]+$')) { errorService.setError("Username should contain only letters numbers and spaces", "username"); }
       else { 
         this.showLoader = true;
-        const regResult = await registerService.register(this.$data); 
+        const regResult = await registerService.register(this); 
         if(regResult) { this.$router.push('checkemail'); }
         this.showLoader = false;
       }

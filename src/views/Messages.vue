@@ -34,6 +34,7 @@ import Message from "../views/Message.vue";
 import NavMessages from "../views/NavMessages.vue";
 
 const state = require("../services/state");
+const messageService = require("../services/message-service");
 
 export default {
   name: "Messages",
@@ -52,9 +53,9 @@ export default {
     sendMessage() { this.$router.push('sendmessage'); },
     handleKeyEvent(e) { 
       if(this.keyStatus) {
-        if(e.keyCode === 66 && e.ctrlKey) { this.keyStatus = false; this.$router.push('profile'); } 
-        else if(e.keyCode === 77  && e.ctrlKey) { this.keyStatus = false; this.$router.push('sendmessage');} 
-        else if(e.keyCode === 89 && e.ctrlKey) { this.keyStatus = false; this.$router.push('archive'); }
+        if(e.keyCode === 66 && e.ctrlKey) { this.keyStatus = false; this.$router.push('profile'); }
+        if(e.keyCode === 77  && e.ctrlKey) { this.keyStatus = false; this.$router.push('sendmessage');} 
+        if(e.keyCode === 89 && e.ctrlKey) { this.keyStatus = false; this.$router.push('archive'); }
       }
     }
   },
@@ -64,18 +65,11 @@ export default {
     getMessage() { return state.message.mess; },
     showNumber() { return state.eventstate.admin === state.userstate.key; }
   },
+  created() { if(!state.eventstate.key) { this.$router.push('select'); }},
   mounted() {
-    setInterval(() => {
-      this.messages = state.eventstate.messages;
-      this.messNumber = state.eventstate.messages.length;
-    }, 100);
-    setTimeout(() => {
-      const element = document.getElementById("modal");
-      if (element) { element.style.display = "none"; }
-      state.message.mess = null;
-    }, 3000);
-    const that = this;
-    document.addEventListener('keydown', function(e) { that.handleKeyEvent(e); });
+    messageService.handleModal();
+    messageService.updateState(this);
+    document.addEventListener('keydown', (e) => this.handleKeyEvent(e) );
   }
 };
 </script>
@@ -111,7 +105,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 42px;
+  margin-top: 40px;
 }
 .nav-background {
   width: 100%;
@@ -141,8 +135,8 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(171, 188, 190, 0.4);
-  animation: fadeInAnimation1 ease 3s;
+  background-color: rgba(110, 110, 110, 0.6);
+  animation: fadeInAnimation1 ease 2.5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 }
@@ -164,7 +158,7 @@ export default {
   border: none;
   border-radius: 10px;
   width: 40%;
-  box-shadow: inset 0 0 0 2px rgb(184, 176, 158), 0em 0em 1em rgba(0, 0, 0, 0.3);
+  
 }
 .text {
   margin-left: 30px;

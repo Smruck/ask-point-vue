@@ -66,9 +66,9 @@
             >
             <b>Create event</b>
             </button>
+            <button id="btn" type="submit" class="b"></button>
           </span>
         </div>
-         <button id="btn" type="submit" class="b"></button>
          <div v-if="showLoader" class="loader">
           <Loader />
          </div>
@@ -89,9 +89,7 @@ import Loader from "../views/Loader.vue";
 import NavComponent from "../views/NavComponent.vue";
 
 const selectService = require("../services/select-service.js");
-const messageService = require("../services/message-service.js");
 const state = require("../services/state.js");
-const errorService = require('../services/custom-error.js');
 
 export default {
   name: "Select",
@@ -101,39 +99,16 @@ export default {
       state.message.mess = null;
       document.getElementById("modal").style.display = "none";
     },
-    selectEvent: async function() {
-      if(!this.event) { errorService.setError("Please select your event", "event"); return; }
-      if(!this.password) { errorService.setError("Please type event's password", "password"); return; }
-      this.showLoader = true;
-      const event = await selectService.checkEventPassword({ event: this.event, password: this.password }); 
-      if(!event) { errorService.setError("Event name and password do not match", "event"); this.showLoader = false; }
-      else {
-        const updateResult = await messageService.updateMessages();
-        if(updateResult) { this.$router.push('messages'); }
-      }
-    },
-    createEvent: async function() {
-      this.clearErrors();
-      if(!state.userstate.key) { errorService.setError("Please log in first in order to create an event", "btn"); return; }
-      if(!this.event) { errorService.setError("Please select event's name", "event"); return; }
-      if(!this.event.match('^[a-zA-Z0-9 ]+$')) { errorService.setError('Event name should contain letters numbers and spaces only', 'event'); return; }
-      if(this.event.length > 30 || this.event.length < 3) { this.setCustomError("Your event name should be between 3 and 30 symbols", "event"); return; }
-      if(!this.password) { errorService.setError("Please choose a password for this event", "password"); return; }
-      if(this.password.length > 30 || this.password.length < 3) { errorService.setError("Your password should be between 3 and 30 symbols", "password"); return; }
-      this.showLoader = true;
-      const eventExists = state.eventNames.names.includes(this.event);
-      if(eventExists) { errorService.setError("Sorry but this name is already taken", "event"); this.showLoader = false; }
-      else { 
-        const resultSave = await selectService.saveNewEvent(this.event, this.password);
-        if(resultSave) { this.$router.push('messages'); }
-      }
-    },
+    selectEvent: function() { selectService.checkInputDataSelect(this); },
+    createEvent: function() { selectService.checkInputDataCreate(this); },
     clearErrors: function() {
       document.getElementById("event").setCustomValidity("");
       document.getElementById("password").setCustomValidity("");
     },
-    suggestions: async function() {
-      this.events = await selectService.getSuggestions(this.event);
+    suggestions: async function() { this.events = await selectService.getSuggestions(this.event); },
+    handleKeyEvent(e) { 
+      if(e.keyCode === 66 && e.ctrlKey) { this.$router.push('profile'); }
+      if(e.keyCode === 81 && e.ctrlKey) { this.$router.push('messages'); }
     }
   },
   computed: {
@@ -141,13 +116,13 @@ export default {
     getMessage: function() { return state.message.mess; },
   },
   components: { NavComponent, Loader },
-  beforeCreate: async function() { await selectService.getAllEvents(); },
   mounted() {
+    document.addEventListener('keydown', (e) => this.handleKeyEvent(e));
     setTimeout(() => {
       const element = document.getElementById("modal");
       if (element) { element.style.display = "none"; }
       state.message.mess = null;
-    }, 3100);
+    }, 3000);
   }
 };
 </script>
@@ -291,15 +266,14 @@ export default {
 .modal {
   display: block;
   position: fixed;
-  z-index: 1;
+  z-index: 9999;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(171, 188, 190, 0.4);
-
-  animation: fadeInAnimation1 ease 3s;
+  background-color: rgba(110, 110, 110, 0.6);
+  animation: fadeInAnimation1 ease 2.5s;
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 }
@@ -321,7 +295,6 @@ export default {
   border: none;
   border-radius: 10px;
   width: 40%;
-  box-shadow: inset 0 0 0 2px rgb(184, 176, 158), 0em 0em 1em rgba(0, 0, 0, 0.3);
 }
 .text {
   margin-left: 30px;
@@ -352,7 +325,7 @@ export default {
 }
 .b{
   pointer-events: none;
-cursor: default;
+  cursor: default;
   opacity: 0;
 } 
 </style>
