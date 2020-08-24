@@ -35,14 +35,14 @@ import NavMessages from "../views/NavMessages.vue";
 
 const state = require("../services/state");
 const messageService = require("../services/message-service");
+const customRouter = require("../services/custom-router");
 
 export default {
   name: "Messages",
   data() {
     return { 
       messages: state.eventstate.messages, 
-      messNumber: state.eventstate.messages.length, 
-      keyStatus: true 
+      messNumber: state.eventstate.messages.length
     };
   },
   methods: {
@@ -50,13 +50,11 @@ export default {
       document.getElementById("modal").style.display = "none";
       state.message.mess = null;
     },
-    sendMessage() { this.$router.push('sendmessage'); },
+    sendMessage() {  this.$router.push('sendmessage'); },
     handleKeyEvent(e) { 
-      if(this.keyStatus) {
-        if(e.keyCode === 66 && e.ctrlKey) { this.keyStatus = false; this.$router.push('profile'); }
-        if(e.keyCode === 77  && e.ctrlKey) { this.keyStatus = false; this.$router.push('sendmessage');} 
-        if(e.keyCode === 89 && e.ctrlKey) { this.keyStatus = false; this.$router.push('archive'); }
-      }
+      if(e.keyCode === 66 && e.ctrlKey) { customRouter.navigate('profile', this); }
+      if(e.keyCode === 77  && e.ctrlKey) { customRouter.navigate('sendmessage', this); } 
+      if(e.keyCode === 89 && e.ctrlKey) {  customRouter.navigate('archive', this); }
     }
   },
   components: { Message, NavMessages },
@@ -65,11 +63,16 @@ export default {
     getMessage() { return state.message.mess; },
     showNumber() { return state.eventstate.admin === state.userstate.key; }
   },
-  created() { if(!state.eventstate.key) { this.$router.push('select'); }},
+  created() { 
+    if(!state.eventstate.key) { this.$router.push('select'); }
+    window.addEventListener('keyup', (e) => this.handleKeyEvent(e));
+  },
   mounted() {
     messageService.handleModal();
     messageService.updateState(this);
-    document.addEventListener('keydown', (e) => this.handleKeyEvent(e) );
+  },
+  destroyed() { 
+    window.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); 
   }
 };
 </script>

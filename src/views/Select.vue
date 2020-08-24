@@ -66,7 +66,7 @@
             >
             <b>Create event</b>
             </button>
-            <button id="btn" type="submit" class="b"></button>
+            <button id="btn" class="b"></button>
           </span>
         </div>
          <div v-if="showLoader" class="loader">
@@ -90,6 +90,7 @@ import NavComponent from "../views/NavComponent.vue";
 
 const selectService = require("../services/select-service.js");
 const state = require("../services/state.js");
+const customRouter = require("../services/custom-router.js");
 
 export default {
   name: "Select",
@@ -99,16 +100,13 @@ export default {
       state.message.mess = null;
       document.getElementById("modal").style.display = "none";
     },
-    selectEvent: function() { selectService.checkInputDataSelect(this); },
-    createEvent: function() { selectService.checkInputDataCreate(this); },
-    clearErrors: function() {
-      document.getElementById("event").setCustomValidity("");
-      document.getElementById("password").setCustomValidity("");
-    },
+    selectEvent: function() { selectService.proceedSelectEvent(this); },
+    createEvent: function() { selectService.proceedCreateEvent(this); },
     suggestions: async function() { this.events = await selectService.getSuggestions(this.event); },
     handleKeyEvent(e) { 
-      if(e.keyCode === 66 && e.ctrlKey) { this.$router.push('profile'); }
-      if(e.keyCode === 81 && e.ctrlKey) { this.$router.push('messages'); }
+      if(e.keyCode === 66 && e.ctrlKey) { customRouter.navigate('profile', this); }
+      if(e.keyCode === 81 && e.ctrlKey) { customRouter.navigate('messages', this); }
+      if(e.keyCode === 13) { this.selectEvent(); }
     }
   },
   computed: {
@@ -116,14 +114,9 @@ export default {
     getMessage: function() { return state.message.mess; },
   },
   components: { NavComponent, Loader },
-  mounted() {
-    document.addEventListener('keydown', (e) => this.handleKeyEvent(e));
-    setTimeout(() => {
-      const element = document.getElementById("modal");
-      if (element) { element.style.display = "none"; }
-      state.message.mess = null;
-    }, 3000);
-  }
+  created() { window.addEventListener('keyup', (e) => this.handleKeyEvent(e)); },
+  mounted() { selectService.modalSection(); },
+  destroyed() { window.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); }
 };
 </script>
 

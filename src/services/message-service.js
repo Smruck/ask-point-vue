@@ -33,8 +33,8 @@ export async function removeMessage(index) {
     return false;
 }
 export async function removeDeletedMessage(index) { 
+
     const message_id = state.eventstate.deleted[index]._id;
-    
     socketService.removeDeleted(index);
     const header = await authService.getHeader('DELETE');
     const response = await fetch(`${state.domain.url}/api/deleted/${message_id}`, header);
@@ -42,6 +42,7 @@ export async function removeDeletedMessage(index) {
     return false;
 }
 export async function changeLikes(index, updown) {
+
     const message_id = state.eventstate.messages[index]._id;
     state.voted.messages.push(message_id);
     socketService.changeLikes({ index, updown });
@@ -65,7 +66,7 @@ export function updateState(component) {
     setInterval(() => { 
         component.messages = state.eventstate.messages; 
         component.messNumber = state.eventstate.messages.length;
-    }, 60);
+    }, 100);
 }
 export function handleModal() {
     setTimeout(() => {

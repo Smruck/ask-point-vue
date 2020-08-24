@@ -1,11 +1,8 @@
 const state = require("./state");
-var socketConnectionInstance;
+var socketConnectionInstance = undefined;
 
-export function initializeConnection() { 
-    if(socketConnectionInstance) { 
-        dropSocketConnection(); 
-        socketConnectionInstance = undefined 
-    }
+export async function initializeConnection() { 
+    await closeConnection();
     socketConnectionInstance = new socketConnection();
 }
 export function sendMessage(message) { 
@@ -24,18 +21,20 @@ export function removeDeleted(index) {
     const data = { index: index, room: state.eventstate.name, token: state.eventstate.token };
     socketConnectionInstance.removeDeleted(data); 
 }
-export function updateEventNames(event) { 
-    const data = { event: event, room: state.eventstate.name, token: state.eventstate.token }
+export async function updateEventNames(event) { 
+    const data = { event: event, token: state.eventstate.token }
     socketConnectionInstance.updateEventNames(data); 
 }
 export function deleteAll() { 
     const data = { room: state.eventstate.name, token: state.eventstate.token };
     socketConnectionInstance.deleteAll(data); 
 }
-export function dropSocketConnection() { 
-    socketConnectionInstance.dropSocketConnection();
+async function closeConnection() {
+    if(socketConnectionInstance) { 
+        await socketConnectionInstance.dropSocketConnection(); 
+        socketConnectionInstance = undefined;
+    }
 }
-
 export class socketConnection {
 
     constructor() {
@@ -49,34 +48,28 @@ export class socketConnection {
             const data = { room: this.room, token: this.token };
             this.socket.emit('join', data); 
         });
-
         this.socket.on('message', (data) => { 
             this.state.eventstate.messages.push(data.message); 
         });
-
         this.socket.on('deleteall', (data) => { 
-            console.log(data);
+            data;
             if(this.state.userstate.key === this.state.eventstate.admin) { 
                 this.state.eventstate.deleted = []; 
             }
         });
-
         this.socket.on('delete', (data) => { 
             const message = this.state.eventstate.messages[data.index];
             this.state.eventstate.deleted.push(message);
             this.state.eventstate.messages.splice(data.index, 1); 
         });
-
         this.socket.on('likes', (data) => { 
             this.state.eventstate.messages[data.index].likes += data.updown; 
         });
-
         this.socket.on('deleted', (data) => { 
             if(this.state.userstate.key === this.state.eventstate.admin) { 
                 this.state.eventstate.deleted.splice(data.index, 1); 
             }
         });
-
         this.socket.on('event', (data) => { 
             this.state.eventstate.eventNames.names.push(data.event);
         });
@@ -88,5 +81,5 @@ export class socketConnection {
     changeLikes(data) { this.socket.emit('likes', data); }
     dropSocketConnection() { this.socket.disconnect(true); }
     deleteAll(data) { this.socket.emit('deleteall', data); }
-    updateEventNames(event) { this.socket.emit('event', event); }
+    updateEventNames(data) { this.socket.emit('event', data); }
 }

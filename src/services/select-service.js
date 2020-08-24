@@ -5,6 +5,7 @@ const errorService = require('../services/custom-error.js');
 const selectService = require("../services/select-service.js");
 const socketService = require("../services/socket-io-service.js");
 const messageService = require("../services/message-service.js");
+const customRouter = require("../services/custom-router.js");
 
 export async function getSuggestions(name) {
 
@@ -27,10 +28,12 @@ export async function saveNewEvent(name, password) {
     const body = JSON.stringify({ data: hashedData })
     const header = await authService.getHeader('POST', body);
     const response = await fetch(`${state.domain.url}/api/events`, header);
-    const load = await response.json();
-    console.log(load);
-    if (response.ok) { setCurrentEvent(load); return true; }
-    return false;
+    if (response.ok) { 
+        const responseEvent = await response.json();
+        await setCurrentEvent(responseEvent); 
+        return true; 
+    }
+    else { return false; }
 }
 export async function checkEventPassword(data) {
 
@@ -40,11 +43,11 @@ export async function checkEventPassword(data) {
     const header = await authService.getHeader('POST', body);
     const response = await fetch(`${state.domain.url}/api/signinevent`, header);
     if (response.ok) { return await response.json(); }
-    return false; 
+    else { return false; }
 }
-export async function checkInputDataSelect(component) {
+export async function proceedSelectEvent(component) {
 
-    component.clearErrors();
+    await clearErrors();
     if(!component.event) { errorService.setError("Please select your event", "event"); return; }
     if(!component.password) { errorService.setError("Please type event's password", "password"); return; }
     component.showLoader = true;
@@ -55,16 +58,23 @@ export async function checkInputDataSelect(component) {
         return;
     }
     else {
-        setCurrentEvent(event);
+        await setCurrentEvent(event);
         await messageService.loadMessages();
         if(state.userstate.key === state.eventstate.admin) { await messageService.loadDeleted(); }
-        socketService.initializeConnection();
+        await socketService.initializeConnection();
+        customRouter.navigate('messages', component);
     }
-    component.$router.push('messages');
 }
-export async function checkInputDataCreate(component) {
+export function modalSection() {
+    setTimeout(() => {
+        const element = document.getElementById("modal");
+        if (element) { element.style.display = "none"; }
+        state.message.mess = null;
+      }, 3000);
+}
+export async function proceedCreateEvent(component) {
     
-    component.clearErrors();
+    await clearErrors();
     if(!state.userstate.key) { errorService.setError("Please log in first in order to create an event", "btn"); return; }
     if(!component.event) { errorService.setError("Please select a name for your event", "event"); return; }
     if(!component.event.match('^[a-zA-Z0-9 ]+$')) { errorService.setError('Event name should contain letters numbers and spaces only', 'event'); return; }
@@ -75,15 +85,24 @@ export async function checkInputDataCreate(component) {
     component.showLoader = true;
     const resultSave = await selectService.saveNewEvent(component.event, component.password);
     if(resultSave) { 
-        socketService.initializeConnection(state.eventstate.token);
-        socketService.updateEventNames(component.event);
-        component.$router.push('messages'); 
+        await socketService.initializeConnection();
+        await socketService.updateEventNames(component.event);
+        customRouter.navigate('messages', component); 
     }
 }
-function setCurrentEvent(event) {
+async function setCurrentEvent(event) {
     state.eventstate.key = event._id;
     state.eventstate.name = event.name;
     state.eventstate.date = event.date;
     state.eventstate.admin = event.admin;
     state.eventstate.token = event.token;
+}
+
+async function clearErrors() {
+    const eventField = document.getElementById("event");
+    const passwordField = document.getElementById("password");
+    if(eventField & passwordField) { 
+      eventField.setCustomValidity("");
+      passwordField.setCustomValidity(""); 
+    }
 }

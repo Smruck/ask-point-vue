@@ -14,9 +14,9 @@ export function updateState(component) {
     setInterval(function() {
         component.messages = state.eventstate.deleted; 
         component.messagesCount = state.eventstate.deleted.length; 
-    }, 60); 
+    }, 100); 
 }
-export function evaluateEnterCredentials(component) {
+export async function checkCredentials(component) {
     if(!state.userstate.key) { component.$router.push('login'); return; }
     if(state.userstate.key === state.eventstate.admin) { return; }
     component.$router.push('messages'); 

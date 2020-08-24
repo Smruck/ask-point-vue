@@ -26,6 +26,8 @@ import DeletedMessage from '../views/DeletedMessage.vue';
 
 const archiveService = require('../services/archive-service.js');
 const state = require('../services/state.js');
+const customRouter = require("../services/custom-router");
+
 
 export default {
   name: "Archive",
@@ -38,17 +40,16 @@ export default {
   methods: {
     deleteAll: async function() { await archiveService.deleteAll(); },
     handleKeyEvent(e) { 
-      if(e.keyCode === 66 && e.ctrlKey) { this.$router.push('profile'); }
-      if(e.keyCode === 81 && e.ctrlKey) { this.$router.push('messages'); }
+      if(e.keyCode === 66 && e.ctrlKey) { customRouter.navigate('profile', this); }
+      if(e.keyCode === 81 && e.ctrlKey) { customRouter.navigate('messages', this); }
     },
   },
-  created() { 
-    archiveService.evaluateEnterCredentials(this); 
+  created: async function() { 
+    await archiveService.checkCredentials(this); 
+    window.addEventListener('keyup', (e) => this.handleKeyEvent(e));
   }, 
-  mounted() { 
-    archiveService.updateState(this); 
-    document.addEventListener('keydown', (e) => this.handleKeyEvent(e));
-  }
+  mounted() { archiveService.updateState(this); },
+  destroyed() { window.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); }
 };
 </script>
 
