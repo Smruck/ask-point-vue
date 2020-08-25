@@ -30,8 +30,7 @@ export async function saveNewEvent(name, password) {
     const response = await fetch(`${state.domain.url}/api/events`, header);
     if (response.ok) { 
         const responseEvent = await response.json();
-        await setCurrentEvent(responseEvent); 
-        return true; 
+        return responseEvent; 
     }
     else { return false; }
 }
@@ -52,17 +51,17 @@ export async function proceedSelectEvent(component) {
     if(!component.password) { errorService.setError("Please type event's password", "password"); return; }
     component.showLoader = true;
     const event = await checkEventPassword({ event: component.event, password: component.password }); 
-    if(!event) { 
+    if(event) { 
+        await setCurrentEvent(event);
+        await socketService.initializeConnection();
+        await messageService.loadMessages();
+        if(state.userstate.key === state.eventstate.admin) { await messageService.loadDeleted(); }
+        customRouter.navigate('messages', component);
+    }
+    else {
         errorService.setError("Event name and password do not match", "password"); 
         component.showLoader = false; 
         return;
-    }
-    else {
-        await setCurrentEvent(event);
-        await messageService.loadMessages();
-        if(state.userstate.key === state.eventstate.admin) { await messageService.loadDeleted(); }
-        await socketService.initializeConnection();
-        customRouter.navigate('messages', component);
     }
 }
 export function modalSection() {
@@ -83,10 +82,11 @@ export async function proceedCreateEvent(component) {
     if(component.password.length > 30 || component.password.length < 3) { errorService.setError("Your password should be between 3 and 30 symbols", "password"); return; }
     if(state.eventNames.names.includes(component.event)) { errorService.setError("Sorry but this name is already taken", "event"); return; }
     component.showLoader = true;
-    const resultSave = await selectService.saveNewEvent(component.event, component.password);
-    if(resultSave) { 
+    const event = await selectService.saveNewEvent(component.event, component.password);
+    if(event) { 
+        await setCurrentEvent(event); 
         await socketService.initializeConnection();
-        await socketService.updateEventNames(component.event);
+        await socketService.updateEventNames(event.name);
         customRouter.navigate('messages', component); 
     }
 }
@@ -96,8 +96,9 @@ async function setCurrentEvent(event) {
     state.eventstate.date = event.date;
     state.eventstate.admin = event.admin;
     state.eventstate.token = event.token;
+    state.eventstate.deleted = [];
+    state.eventstate.messages = [];
 }
-
 async function clearErrors() {
     const eventField = document.getElementById("event");
     const passwordField = document.getElementById("password");

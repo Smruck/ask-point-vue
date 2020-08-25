@@ -62,12 +62,14 @@ export async function sendMessage(content) {
     if(response.ok) { return true; }
     return false;
 }
-export function updateState(component) {
+const updateState = function(component) {
     setInterval(() => { 
         component.messages = state.eventstate.messages; 
         component.messNumber = state.eventstate.messages.length;
     }, 100);
 }
+export { updateState as updateState };
+
 export function handleModal() {
     setTimeout(() => {
         const element = document.getElementById("modal");

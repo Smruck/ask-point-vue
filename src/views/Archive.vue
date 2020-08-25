@@ -46,10 +46,10 @@ export default {
   },
   created: async function() { 
     await archiveService.checkCredentials(this); 
-    window.addEventListener('keyup', (e) => this.handleKeyEvent(e));
+    document.addEventListener('keyup', (e) => this.handleKeyEvent(e));
   }, 
   mounted() { archiveService.updateState(this); },
-  destroyed() { window.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); }
+  beforeDestroy() { document.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); }
 };
 </script>
 

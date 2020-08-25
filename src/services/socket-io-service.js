@@ -71,7 +71,7 @@ export class socketConnection {
             }
         });
         this.socket.on('event', (data) => { 
-            this.state.eventstate.eventNames.names.push(data.event);
+            this.state.eventNames.names.push(data.event);
         });
     }
 

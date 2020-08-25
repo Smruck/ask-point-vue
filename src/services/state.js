@@ -24,11 +24,12 @@ export { currentEvent as currentEvent };
 
 export function clearEventState() { 
     eventstate.name = null; 
-    eventstate.key = null, 
-    eventstate.admin = null, 
-    eventstate.date = null, 
-    eventstate.messages = [],
-    eventstate.deleted = [] 
+    eventstate.key = null;
+    eventstate.admin = null; 
+    eventstate.date = null; 
+    eventstate.messages = [];
+    eventstate.deleted = [];
+    eventstate.token = null;
 }
 export function clearUserState() { 
     userstate.username = null; 

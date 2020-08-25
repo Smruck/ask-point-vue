@@ -62,7 +62,7 @@
               class="btn btncreate"
               data-toggle="tooltip"
               data-placement="bottom"
-              @click="createEvent"
+              @click.prevent="createEvent"
             >
             <b>Create event</b>
             </button>
@@ -94,7 +94,7 @@ const customRouter = require("../services/custom-router.js");
 
 export default {
   name: "Select",
-  data() { return { password: null, event: null, events: null, showLoader: false, initial: null }; },
+  data() { return { password: null, event: null, events: null, showLoader: false, initial: null, singlePress: true }; },
   methods: {
     modaloff() { 
       state.message.mess = null;
@@ -104,9 +104,12 @@ export default {
     createEvent: function() { selectService.proceedCreateEvent(this); },
     suggestions: async function() { this.events = await selectService.getSuggestions(this.event); },
     handleKeyEvent(e) { 
-      if(e.keyCode === 66 && e.ctrlKey) { customRouter.navigate('profile', this); }
-      if(e.keyCode === 81 && e.ctrlKey) { customRouter.navigate('messages', this); }
-      if(e.keyCode === 13) { this.selectEvent(); }
+      if(e.keyCode === 66 && e.ctrlKey && this.singlePress) 
+      { this.singlePress = false; customRouter.navigate('profile', this); }
+      if(e.keyCode === 81 && e.ctrlKey && this.singlePress) 
+      { this.singlePress = false; customRouter.navigate('messages', this); }
+      if(e.keyCode === 13 && this.singlePress) 
+      { this.singlePress = false; this.selectEvent(); }
     }
   },
   computed: {
@@ -114,9 +117,9 @@ export default {
     getMessage: function() { return state.message.mess; },
   },
   components: { NavComponent, Loader },
-  created() { window.addEventListener('keyup', (e) => this.handleKeyEvent(e)); },
+  created() { document.addEventListener('keyup', (e) => this.handleKeyEvent(e)); },
   mounted() { selectService.modalSection(); },
-  destroyed() { window.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); }
+  beforeDestroy() { document.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); }
 };
 </script>
 

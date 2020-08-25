@@ -42,7 +42,7 @@ export default {
   data() {
     return { 
       messages: state.eventstate.messages, 
-      messNumber: state.eventstate.messages.length
+      messNumber: state.eventstate.messages.length,
     };
   },
   methods: {
@@ -65,14 +65,14 @@ export default {
   },
   created() { 
     if(!state.eventstate.key) { this.$router.push('select'); }
-    window.addEventListener('keyup', (e) => this.handleKeyEvent(e));
+    document.addEventListener('keyup', (e) => this.handleKeyEvent(e));
   },
   mounted() {
     messageService.handleModal();
     messageService.updateState(this);
   },
-  destroyed() { 
-    window.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); 
+  beforeDestroy() { 
+    document.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); 
   }
 };
 </script>

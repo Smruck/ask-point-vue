@@ -10,14 +10,17 @@ export async function deleteAll() {
         await fetch(`${state.domain.url}/api/deleted`, header);
     }
 }
-export function updateState(component) {
+const updateState =  function(component) {
     setInterval(function() {
         component.messages = state.eventstate.deleted; 
         component.messagesCount = state.eventstate.deleted.length; 
     }, 100); 
 }
+export { updateState as updateState };
+
 export async function checkCredentials(component) {
     if(!state.userstate.key) { component.$router.push('login'); return; }
     if(state.userstate.key === state.eventstate.admin) { return; }
     component.$router.push('messages'); 
 }
+
