@@ -14,7 +14,7 @@ const updateState =  function(component) {
     setInterval(function() {
         component.messages = state.eventstate.deleted; 
         component.messagesCount = state.eventstate.deleted.length; 
-    }, 100); 
+    }, 111); 
 }
 export { updateState as updateState };
 

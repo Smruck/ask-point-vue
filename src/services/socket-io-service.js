@@ -29,6 +29,10 @@ export function deleteAll() {
     const data = { room: state.eventstate.name, token: state.eventstate.token };
     socketConnectionInstance.deleteAll(data); 
 }
+export function updateAvatar(link) { 
+    const data = { link: link, user_id: state.userstate.key, token: state.eventstate.token };
+    socketConnectionInstance.updateAvatar(data); 
+}
 async function closeConnection() {
     if(socketConnectionInstance) { 
         await socketConnectionInstance.dropSocketConnection(); 
@@ -50,7 +54,7 @@ export class socketConnection {
         });
         this.socket.on('message', (data) => { 
             this.state.eventstate.messages.push(data.message); 
-        });
+        }); 
         this.socket.on('deleteall', (data) => { 
             data;
             if(this.state.userstate.key === this.state.eventstate.admin) { 
@@ -70,8 +74,12 @@ export class socketConnection {
                 this.state.eventstate.deleted.splice(data.index, 1); 
             }
         });
-        this.socket.on('event', (data) => { 
+        this.socket.on('event', (data) => {  
             this.state.eventNames.names.push(data.event);
+        });
+        this.socket.on('avatar', (data) => {
+            if(this.state.userstate.key === data.user_id) { this.state.userstate.image = data.link; }  
+            this.state.eventstate.messages.map(m => m.image = m.user_id === data.user_id ? data.link : m.image);
         });
     }
 
@@ -82,4 +90,5 @@ export class socketConnection {
     dropSocketConnection() { this.socket.disconnect(true); }
     deleteAll(data) { this.socket.emit('deleteall', data); }
     updateEventNames(data) { this.socket.emit('event', data); }
+    updateAvatar(data) { this.socket.emit('avatar', data); }
 }

@@ -45,7 +45,7 @@ export default {
     send: async function() { 
       if(this.content.trim() !== '') { 
         this.showLoader = true;
-        const result = messageService.sendMessage(this.content);
+        const result = await messageService.sendMessage(this.content);
         if(result) { this.$router.push('messages');  }
       }
     },

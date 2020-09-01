@@ -7,7 +7,7 @@ export async function loadMessages() {
     const response = await fetch(`${state.domain.url}/api/messages/${state.eventstate.key}`, header);
     if(response.ok) { 
         const messages = await response.json();
-        if(messages) { state.eventstate.messages = [].concat(messages); }
+        if(messages) { state.eventstate.messages = messages; }
         return true; 
     }
     return false;
@@ -16,8 +16,8 @@ export async function loadDeleted() {
     const header = await authService.getHeader("GET");
     const response = await fetch(`${state.domain.url}/api/deleted/${state.eventstate.key}`, header);
     if(response.ok) { 
-        const messages = await response.json();
-        if(messages) { state.eventstate.deleted = [].concat(messages); }
+        const deleted = await response.json();
+        if(deleted) { state.eventstate.deleted = deleted; }
         return true; 
     }
     return false;
@@ -60,13 +60,13 @@ export async function sendMessage(content) {
     const header = await authService.getHeader('POST', body);
     const response = await fetch(`${state.domain.url}/api/messages`, header);
     if(response.ok) { return true; }
-    return false;
+    else { return false; }
 }
 const updateState = function(component) {
     setInterval(() => { 
         component.messages = state.eventstate.messages; 
         component.messNumber = state.eventstate.messages.length;
-    }, 100);
+    }, 111);
 }
 export { updateState as updateState };
 
@@ -77,7 +77,6 @@ export function handleModal() {
         state.message.mess = null;
     }, 3000);
 }
-
 function getDateAsString() { 
     return new Date().toString().substring(0, 24); 
 }

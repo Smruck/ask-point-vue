@@ -118,7 +118,7 @@ export default {
       if(state.eventstate.key) { this.$router.push('messages'); }
       else { this.$router.push('select'); } 
     },
-    changeImage: async function(e) {
+    changeImage: async function(e) {      
       this.showLoader = true;
       await imageService.saveImage(e.target.files[0]);
       this.showLoader = false;  

@@ -15,9 +15,9 @@ export async function getSuggestions(name) {
 export async function getAllEventNames() {
 
     const header = await authService.getHeader('GET');
-    const result = await fetch(`${state.domain.url}/api/events`, header);
-    if (result.ok) {
-        const names = await result.json();
+    const response = await fetch(`${state.domain.url}/api/events`, header);
+    if (response.ok) {
+        const names = await response.json();
         state.eventNames.names = names;
     }
 }
@@ -46,7 +46,6 @@ export async function checkEventPassword(data) {
 }
 export async function proceedSelectEvent(component) {
 
-    await clearErrors();
     if(!component.event) { errorService.setError("Please select your event", "event"); return; }
     if(!component.password) { errorService.setError("Please type event's password", "password"); return; }
     component.showLoader = true;
@@ -64,31 +63,37 @@ export async function proceedSelectEvent(component) {
         return;
     }
 }
-export function modalSection() {
-    setTimeout(() => {
-        const element = document.getElementById("modal");
-        if (element) { element.style.display = "none"; }
-        state.message.mess = null;
-      }, 3000);
-}
 export async function proceedCreateEvent(component) {
     
-    await clearErrors();
-    if(!state.userstate.key) { errorService.setError("Please log in first in order to create an event", "btn"); return; }
+    if(!state.userstate.key) { 
+        memorizeFields(component);
+        errorService.setError("Please log in first in order to create an event", "btn"); 
+        return; 
+    }
     if(!component.event) { errorService.setError("Please select a name for your event", "event"); return; }
     if(!component.event.match('^[a-zA-Z0-9 ]+$')) { errorService.setError('Event name should contain letters numbers and spaces only', 'event'); return; }
     if(component.event.length > 30 || component.event.length < 3) { errorService.setError("Your event name should be between 3 and 30 symbols", "event"); return; }
     if(!component.password) { errorService.setError("Please choose a password for this event", "password"); return; }
     if(component.password.length > 30 || component.password.length < 3) { errorService.setError("Your password should be between 3 and 30 symbols", "password"); return; }
     if(state.eventNames.names.includes(component.event)) { errorService.setError("Sorry but this name is already taken", "event"); return; }
+    console.log('after input filters')
     component.showLoader = true;
     const event = await selectService.saveNewEvent(component.event, component.password);
-    if(event) { 
+
+    if(event) {
+        resetFields(); 
         await setCurrentEvent(event); 
         await socketService.initializeConnection();
         await socketService.updateEventNames(event.name);
-        customRouter.navigate('messages', component); 
+        component.$router.push('messages'); 
     }
+}
+export function modalSection() {
+    setTimeout(() => {
+        const element = document.getElementById("modal");
+        if (element) { element.style.display = "none"; }
+        state.message.mess = null;
+      }, 3000);
 }
 async function setCurrentEvent(event) {
     state.eventstate.key = event._id;
@@ -99,11 +104,11 @@ async function setCurrentEvent(event) {
     state.eventstate.deleted = [];
     state.eventstate.messages = [];
 }
-async function clearErrors() {
-    const eventField = document.getElementById("event");
-    const passwordField = document.getElementById("password");
-    if(eventField & passwordField) { 
-      eventField.setCustomValidity("");
-      passwordField.setCustomValidity(""); 
-    }
+function memorizeFields(component) {
+    state.selectFields.event = component.event;
+    state.selectFields.password = component.password;
+}
+function resetFields() {
+    state.selectFields.event = null;
+    state.selectFields.password = null;
 }

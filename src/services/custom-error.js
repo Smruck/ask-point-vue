@@ -1,8 +1,9 @@
 export function setError(error, elementId) {
-    const element = document.getElementById(elementId);
     const button = document.getElementById('btn');
+    const element = document.getElementById(elementId);
     if(element && button) { 
         element.setCustomValidity(error);
-        setTimeout(() => { if(document.getElementById('btn')) { button.click(); }}, 10); 
+        setTimeout(() => { button.click(); }, 3); 
+        setTimeout(() => { element.setCustomValidity(''); }, 1600);
     }
 }

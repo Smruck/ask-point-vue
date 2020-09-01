@@ -48,6 +48,7 @@
         <div class="btns">
           <span>
             <button
+              type="button"
               @click.prevent="selectEvent"
               class="btn btnask"
               data-toggle="tooltip"
@@ -58,6 +59,7 @@
           </span>
           <span>
             <button
+              type="button"
               id="btncreate"
               class="btn btncreate"
               data-toggle="tooltip"
@@ -94,7 +96,7 @@ const customRouter = require("../services/custom-router.js");
 
 export default {
   name: "Select",
-  data() { return { password: null, event: null, events: null, showLoader: false, initial: null, singlePress: true }; },
+  data() { return { password: null, event: null, events: null, showLoader: false, initial: null, singlePress: true, }; },
   methods: {
     modaloff() { 
       state.message.mess = null;
@@ -118,7 +120,11 @@ export default {
   },
   components: { NavComponent, Loader },
   created() { document.addEventListener('keyup', (e) => this.handleKeyEvent(e)); },
-  mounted() { selectService.modalSection(); },
+  mounted: async function() { 
+    selectService.modalSection(); 
+    this.event = state.selectFields.event ? state.selectFields.event : null; 
+    this.password = state.selectFields.password ? state.selectFields.password : null; 
+  },
   beforeDestroy() { document.removeEventListener('keyup', (e) => this.handleKeyEvent(e)); }
 };
 </script>

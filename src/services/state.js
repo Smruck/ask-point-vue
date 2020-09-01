@@ -8,7 +8,7 @@ const repo = { email: '' }
 const voted = { messages: [] }
 const appkey = "Àì|¨ÍwÐWvO.7";
 const apptext = 'bG9jYWxob3N0';
-const currentEvent = null;
+const selectFields = { event: null, password: null };
 
 export { userstate as userstate };
 export { eventstate as eventstate };
@@ -20,7 +20,7 @@ export { repo as repo };
 export { voted as voted };
 export { appkey as appkey };
 export { apptext as apptext };
-export { currentEvent as currentEvent };
+export { selectFields as selectFields };
 
 export function clearEventState() { 
     eventstate.name = null; 
