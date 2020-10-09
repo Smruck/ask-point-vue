@@ -53,7 +53,7 @@ export default {
     sendMessage() {  this.$router.push('sendmessage'); },
     handleKeyEvent(e) { 
       if(e.keyCode === 66 && e.ctrlKey) { customRouter.navigate('profile', this); }
-      if(e.keyCode === 77  && e.ctrlKey) { customRouter.navigate('sendmessage', this); } 
+      if(e.keyCode === 77 && e.ctrlKey) { customRouter.navigate('sendmessage', this); } 
       if(e.keyCode === 89 && e.ctrlKey) {  customRouter.navigate('archive', this); }
     }
   },
